@@ -1,6 +1,6 @@
 # SuperCore
 
-**Letest Version:** 1.1  
+**Letest Version:** 1.4  
 **Developer:** @NacDevs  
 **Git Repo:** [GitHub](https://github.com/yuvrajmodz/SuperHex)
 
