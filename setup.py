@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="supercore",
-    version="1.2",
+    version="1.4",
     author="@NacDevs",
     author_email="yuvrajmodz@gmail.com",
     description="Simple CLI to create supervisor processes easily",
