@@ -7,12 +7,13 @@ import tty
 import select
 import threading
 import time
+import importlib.metadata
 
 # 𝗠𝗮𝗻𝗮𝗴𝗲𝗱 𝗕𝘆 @𝗡𝗮𝗰𝘁𝗶𝗿𝗲
 
 def check_root():
     if os.geteuid() != 0:
-        print("\033[1;31m𝗬𝗼𝘂𝗿 𝗩𝗽𝘀/𝗠𝗮𝗰𝗵𝗶𝗻𝗲 𝗶𝘀 𝗡𝗼𝘁 𝗥𝗼𝗼𝘁! 𝗣𝗹𝗲𝗮𝘀𝗲 𝗨𝘀𝗲 𝗥𝗼𝗼𝘁 𝗘𝗻𝗰𝗶𝗿𝗼𝗻𝗺𝗲𝗻𝘁.\033[0m")
+        print("\033[1;31mYour Vps/Machine is Not Root! Please Use Root Environment.\033[0m")
         sys.exit(1)
 
 def check_supervisor_installed():
@@ -89,16 +90,14 @@ def get_custom_process_name():
     try:
         process_name = get_filtered_input("┌─╼ 𝗘𝗻𝘁𝗲𝗿 𝗣𝗿𝗼𝗰𝗲𝘀𝘀 𝗡𝗮𝗺𝗲\n└────╼ ❯❯❯ ")
     except KeyboardInterrupt:
-        print("\n\033[1;31m𝗢𝗽𝗲𝗿𝗮𝘁𝗶𝗼𝗻 𝗖𝗮𝗻𝗰𝗲𝗹𝗹𝗲𝗱 𝗕𝘆 𝗨𝘀𝗲𝗿.\033[0m")
+        print("\n\033[1;31mOperation Cancelled By User.\033[0m")
         sys.exit(1)
     if not process_name or not re.fullmatch(r"[A-Za-z0-9-]+", process_name):
-        print("\n")
-        print("\033[1;31m𝗣𝗿𝗼𝗰𝗲𝘀𝘀 𝗡𝗮𝗺𝗲 𝗶𝘀 𝗶𝗻𝘃𝗮𝗹𝗶𝗱. No Space or Special Characters.\033[0m")
+        print("\n\033[1;31mProcess name is invalid.\033[0m")
         sys.exit(1)
     conf_path = f"/etc/supervisor/conf.d/{process_name}.conf"
     if os.path.exists(conf_path):
-        print("\n")
-        print("\033[1;31m𝗣𝗿𝗼𝗰𝗲𝘀𝘀 𝗡𝗮𝗺𝗲 𝗔𝗹𝗿𝗲𝗮𝗱𝘆 𝗘𝘅𝗶𝘀𝘁𝘀. 𝗧𝗿𝘆 𝗗𝗶𝗳𝗳𝗲𝗿𝗲𝗻𝘁 𝗡𝗮𝗺𝗲.\033[0m")
+        print("\n\033[1;31mProcess Name Already Existing.\033[0m")
         sys.exit(1)
     return process_name
 
@@ -180,16 +179,26 @@ def start_supervisor_process(process_name):
 
         out_proc.terminate()
         err_proc.terminate()
-        print("\n")
-        print("\n\033[1;31m𝗘𝘅𝗶𝘁𝗲𝗱.\033[0m")
 
     tail_logs()
+
+def print_version():
+    try:
+        version = importlib.metadata.version("supercore")
+        print(f"\033[1;92mV{version}\033[0m")
+    except importlib.metadata.PackageNotFoundError:
+        print("\033[1;31mSupercore is not installed properly.\033[0m")
 
 def main():
     check_root()
     if len(sys.argv) < 2:
-        print("\033[1;31m𝗦𝗽𝗲𝗰𝗶𝗳𝘆 𝗖𝗼𝗺𝗺𝗮𝗻𝗱 𝗧𝗼 𝗦𝘁𝗮𝗿𝘁 𝗣𝗿𝗼𝗰𝗲𝘀𝘀.\033[0m")
+        print("\033[1;31mSpecify Command To Start Process.\033[0m")
         sys.exit(1)
+    
+    if len(sys.argv) == 2 and sys.argv[1] in ["-v", "--v"]:
+        print_version()
+        sys.exit(0)
+    
     raw_command = " ".join(sys.argv[1:])
     check_supervisor_installed()
     adjusted_command = adjust_python_command(raw_command)
