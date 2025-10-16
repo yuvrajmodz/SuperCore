@@ -1,23 +1,22 @@
 # SuperCore
 
-**Letest Version:** 1.7  
+**Letest Version:** 1.9  
 **Developer:** @NacDevs  
 **Git Repo:** [GitHub](https://github.com/yuvrajmodz/SuperCore)
 
 SuperCore is a Python CLI tool to easily create and start Supervisor-managed processes in Linux.
 
-## Installation & Usage (Global)
+## Installation & Usage
 
 ```bash
 pip install supercore --break-system-packages
 supercore <command>
 ```
 
-## Installation & Usage (Python VENV)
+## Version Checking
 
 ```bash
-pip install supercore
-python3 supercore <command>
+supercore --v
 ```
 
 ## Usage Examples
