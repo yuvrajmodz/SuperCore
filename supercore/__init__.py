@@ -1,3 +1,3 @@
 # Developed By @NacDevs
 # Stable Released
-# Managee By @Nactire
+# Managed By @Nactire
