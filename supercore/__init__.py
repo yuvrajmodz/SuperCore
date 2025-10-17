@@ -1,3 +1,3 @@
-# Developed By @NacDevs
-# Stable Released
-# Managed By @Nactire
+# 𝗗𝗲𝘃𝗲𝗹𝗼𝗽𝗲𝗱 𝗕𝘆 @nactire
+# 𝗦𝘁𝗮𝗯𝗹𝗲 𝗥𝗲𝗹𝗲𝗮𝘀𝗲
+# 𝗖𝗼𝗺𝗺𝘂𝗻𝗶𝘁𝘆: @NacDevs

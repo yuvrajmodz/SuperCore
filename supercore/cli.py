@@ -13,7 +13,7 @@ import importlib.metadata
 
 def check_root():
     if os.geteuid() != 0:
-        print("\033[1;31mYour Vps/Machine is Not Root! Please Use Root Environment.\033[0m")
+        print("\033[1;31mYour VPS/Machine is Not Root! Please Use Root Environment.\033[0m")
         sys.exit(1)
 
 def check_supervisor_installed():
@@ -29,20 +29,20 @@ def check_supervisor_installed():
         subprocess.run(["sudo", "apt", "update", "-o", "Acquire::AllowInsecureRepositories=true"], check=True)
         subprocess.run(["sudo", "apt", "install", "supervisor", "-y"], check=True)
 
-def detect_virtualenv_path():
-    return os.environ.get("VIRTUAL_ENV")
-
-def adjust_python_command(command):
-    parts = command.strip().split()
-    if not parts:
-        return command
-    first_word = parts[0]
-    if first_word not in ["python", "python3"]:
-        return command
-    venv_path = detect_virtualenv_path()
+def detect_virtualenv_activate_path():
+    venv_path = os.environ.get("VIRTUAL_ENV")
     if venv_path:
-        parts[0] = os.path.join(venv_path, "bin", "python")
-    return " ".join(parts)
+        activate_path = os.path.join(venv_path, "bin", "activate")
+        if os.path.exists(activate_path):
+            return activate_path
+    return None
+
+def prepare_command(raw_command):
+    activate_path = detect_virtualenv_activate_path()
+    if activate_path:
+        return f"bash -c 'source {activate_path} && {raw_command}'"
+    else:
+        return raw_command
 
 def _is_data():
     return select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], [])
@@ -194,16 +194,16 @@ def main():
     if len(sys.argv) < 2:
         print("\033[1;31mSpecify Command To Start Process.\033[0m")
         sys.exit(1)
-    
+
     if len(sys.argv) == 2 and sys.argv[1] in ["-v", "--v"]:
         print_version()
         sys.exit(0)
-    
+
     raw_command = " ".join(sys.argv[1:])
     check_supervisor_installed()
-    adjusted_command = adjust_python_command(raw_command)
+    prepared_command = prepare_command(raw_command)
     process_name = get_custom_process_name()
-    create_supervisor_conf(adjusted_command, process_name)
+    create_supervisor_conf(prepared_command, process_name)
     start_supervisor_process(process_name)
 
 if __name__ == "__main__":
