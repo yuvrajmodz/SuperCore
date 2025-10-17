@@ -1,6 +1,6 @@
 # SuperCore
 
-**Letest Version:** 1.9  
+**Letest Version:** 2.0  
 **Developer:** @NacDevs  
 **Git Repo:** [GitHub](https://github.com/yuvrajmodz/SuperCore)
 
@@ -23,7 +23,7 @@ supercore --v
 
 ```bash
 supercore python3 app.py
-python3 supercore python3 app.py
+supercore node app.js
 ```
 
 ## Optional installation
